@@ -1043,7 +1043,7 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
      
      :parameter index: Index of the page to move to
      */
-    open func moveToPage(_ index: Int) {
+    open func moveToPage(_ index: Int, animated: Bool = true) {
         if index >= 0 && index < controllerArray.count {
             // Update page if changed
             if index != currentPageIndex {
@@ -1074,10 +1074,15 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
             // Move controller scroll view when tapping menu item
             let duration : Double = Double(scrollAnimationDurationOnMenuItemTap) / Double(1000)
             
-            UIView.animate(withDuration: duration, animations: { () -> Void in
+            if animated {
+                UIView.animate(withDuration: duration, animations: { () -> Void in
+                    let xOffset : CGFloat = CGFloat(index) * self.controllerScrollView.frame.width
+                    self.controllerScrollView.setContentOffset(CGPoint(x: xOffset, y: self.controllerScrollView.contentOffset.y), animated: false)
+                })
+            } else {
                 let xOffset : CGFloat = CGFloat(index) * self.controllerScrollView.frame.width
                 self.controllerScrollView.setContentOffset(CGPoint(x: xOffset, y: self.controllerScrollView.contentOffset.y), animated: false)
-            })
+            }
         }
     }
 }
